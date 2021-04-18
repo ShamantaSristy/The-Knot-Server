@@ -19,6 +19,7 @@ client.connect(err => {
   const serviceCollection = client.db("theKnot").collection("services");
   const reviewCollection = client.db("theKnot").collection("reviews");
   const orderCollection = client.db("theKnot").collection("orders");
+  const adminCollection = client.db("theKnot").collection("admins");
 
 // service part
   app.post('/addService',(req,res) => {
@@ -35,7 +36,7 @@ client.connect(err => {
     serviceCollection.find()
     .toArray((err, items) => {
       res.send(items);
-      console.log(items);
+      // console.log(items);
     })
     
   });
@@ -55,7 +56,7 @@ client.connect(err => {
     reviewCollection.find()
     .toArray((err, items) => {
       res.send(items);
-      console.log(items);
+      // console.log(items);
     })
     
   });
@@ -72,13 +73,56 @@ client.connect(err => {
   })
   
   app.get('/orders',(req,res) => {
+
     orderCollection.find()
     .toArray((err, items) => {
       res.send(items);
-      console.log(items);
+      // console.log(items);
     })
     
   });
+
+  app.get('/orders',(req,res) => {
+    console.log(req.query.email);
+    orderCollection.find({email: req.query.email})
+    .toArray((err, items) => {
+      res.send(items);
+      // console.log(items);
+    })
+    
+  });
+
+// admin part 
+  app.post('/addAdmin',(req,res) => {
+    const newAdmin = req.body;
+    console.log("New Admin",newAdmin);
+    adminCollection.insertOne(newAdmin)
+    .then(result => {
+      console.log("Order adding " , result.insertedCount);
+      res.send(result.insertedCount > 0)
+    })
+  })
+  
+  app.get('/admins',(req,res) => {
+    adminCollection.find()
+    .toArray((err, items) => {
+      res.send(items);
+      // console.log(items);
+    })
+    
+  });
+
+  app.post('/isAdmin', (req, res) => {
+    const email = req.body.email;
+    adminCollection.find({ email: email })
+        .toArray((err, admins) => {
+          console.log('admin', admins);
+            res.send(admins.length > 0);
+        })
+})
+
+
+
 
 app.delete('/deleteItem/:id',(req,res) => {
     const Id = ObjectID(req.params.id);
