@@ -5,7 +5,7 @@ This a Bangladeshi wedding manager app.Where, users can order services related t
 
 
 ## Features: 
-  - MongoDb is used as database. 
+  - **MongoDB** is used as database. 
   - An **Admin** can add image and description of a service and create a new service to database which will be shown on UI dynamically.
   - Admin can delete any service from database which will no longer be shown on UI.
   - Google **authentication** activated.
